@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXA - Conectando marcas a resultados</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --violet-primary: #6A1B9A;
+        --violet-light: #9C4DCC;
+        --accent-green: #9AD41B;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #020203;
+        color: white;
+        overflow-x: hidden;
+      }
+      
+      /* Background Particles/Stars */
+      .stars-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .star {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        opacity: 0.3;
+        animation: twinkle var(--duration) ease-in-out infinite;
+      }
+      @keyframes twinkle {
+        0%, 100% { opacity: 0.1; transform: scale(1); }
+        50% { opacity: 0.7; transform: scale(1.2); }
+      }
+
+      .bg-grid-premium {
+        background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                          linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+        background-size: 80px 80px;
+      }
+
+      /* 3D Cyber Grid Effect */
+      .cyber-grid-container {
+        position: absolute;
+        inset: 0;
+        perspective: 1000px;
+        overflow: hidden;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .cyber-grid {
+        position: absolute;
+        width: 400%;
+        height: 400%;
+        top: -150%;
+        left: -150%;
+        background-image: 
+          linear-gradient(to right, rgba(139, 92, 246, 0.15) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(139, 92, 246, 0.15) 1px, transparent 1px);
+        background-size: 60px 60px;
+        transform: rotateX(60deg);
+        transform-origin: center center;
+        mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
+        animation: grid-drift 20s linear infinite;
+      }
+
+      @keyframes grid-drift {
+        0% { transform: rotateX(60deg) translateY(0); }
+        100% { transform: rotateX(60deg) translateY(60px); }
+      }
+
+      /* Floating Data Particles */
+      .data-particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: #9C4DCC;
+        box-shadow: 0 0 10px #9C4DCC;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 1;
+        animation: float-particle var(--p-duration) linear infinite;
+        opacity: var(--p-opacity);
+      }
+
+      @keyframes float-particle {
+        0% { transform: translateY(0) translateX(0); opacity: 0; }
+        20% { opacity: var(--p-opacity); }
+        80% { opacity: var(--p-opacity); }
+        100% { transform: translateY(-100vh) translateX(var(--p-drift)); opacity: 0; }
+      }
+
+      .shimmer-text {
+        background: linear-gradient(90deg, var(--violet-primary), var(--violet-light), #fff, var(--violet-light), var(--violet-primary));
+        background-size: 200% auto;
+        color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: text-shimmer 4s linear infinite;
+        filter: drop-shadow(0 0 15px rgba(156, 77, 204, 0.4));
+      }
+
+      @keyframes text-shimmer {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        filter: blur(12px);
+        transition: all 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+      .delay-100 { transition-delay: 100ms; }
+      .delay-200 { transition-delay: 300ms; }
+      .delay-300 { transition-delay: 500ms; }
+      .delay-500 { transition-delay: 700ms; }
+
+      /* Astronaut Animations */
+      @keyframes astronaut-float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        33% { transform: translateY(-30px) rotate(5deg); }
+        66% { transform: translateY(20px) rotate(-5deg); }
+      }
+
+      @keyframes astronaut-drift-horizontal {
+        0% { transform: translateX(-10vw) rotate(0deg); }
+        100% { transform: translateX(110vw) rotate(360deg); }
+      }
+
+      .astronaut-container {
+        position: absolute;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.25;
+        filter: blur(1px) drop-shadow(0 0 15px rgba(139, 92, 246, 0.3));
+      }
+
+      /* Orbital HUD Elements */
+      .orbit {
+        position: absolute;
+        border-radius: 50%;
+        border: 1px solid rgba(139, 92, 246, 0.1);
+        pointer-events: none;
+      }
+      .orbit-1 { width: 700px; height: 700px; animation: rotate 50s linear infinite; }
+      .orbit-2 { width: 1000px; height: 1000px; animation: rotate 80s linear infinite reverse; }
+      
+      @keyframes rotate {
+        from { transform: translate(-50%, -50%) rotate(0deg); }
+        to { transform: translate(-50%, -50%) rotate(360deg); }
+      }
+
+      .glow-primary {
+        box-shadow: 0 0 40px -5px rgba(106, 27, 154, 0.7);
+      }
+      
+      .hero-gradient {
+        background: radial-gradient(circle at center, rgba(30, 10, 60, 0.5) 0%, rgba(10, 5, 20, 0.8) 50%, #020203 90%);
+      }
+
+      /* Tech Glass Card */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      /* Scanning line effect */
+      .scanning-line {
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--violet-light), transparent);
+        animation: scan 3s linear infinite;
+        opacity: 0.3;
+      }
+      @keyframes scan {
+        0% { top: 0%; }
+        100% { top: 100%; }
+      }
+
+      ::selection {
+        background: var(--violet-primary);
+        color: white;
+      }
+    </style>
+
+<link rel="stylesheet" href="/index.css">
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/assets/index-CSVoyCVu.js"></script>
+</head>
+  <body>
+    <div id="root"></div>
+</body>
+</html>
